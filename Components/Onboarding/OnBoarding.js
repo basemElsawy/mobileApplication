@@ -5,12 +5,15 @@ import {
   Animated,
   FlatList,
   Button,
+  Pressable,
+  Image,
 } from "react-native";
 import { useState, useRef } from "react";
 import OnBoardingItem from "./OnboardingItem";
 import Paginator from "./Paginator";
 import { useNavigation } from "@react-navigation/native";
 // import { slides } from "./slides";
+import arrow from "../../assets/arrow.png";
 const slides = [
   {
     id: 1,
@@ -87,9 +90,9 @@ export default function OnBoarding() {
             title="Skip"
           />
         </View>
-        <View style={styles.blueBtn}>
-          <Button color={"#fff"} onPress={scrollTo} title=">" />
-        </View>
+        <Pressable onPress={scrollTo} style={styles.blueBtn}>
+          <Image source={arrow} />
+        </Pressable>
       </View>
     </View>
   );
@@ -117,7 +120,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     backgroundColor: "#0083DB",
     borderRadius: "4px",
-    paddingHorizontal: 12,
-    paddingVertical: 3,
+    paddingHorizontal: 17,
+    paddingVertical: 12,
   },
 });

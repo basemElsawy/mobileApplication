@@ -17,6 +17,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import OnBoarding from "./Components/Onboarding/OnBoarding";
+import HomePage from "./Components/HomePage/HomePage";
 export default function App() {
   const [isLoadingApp, setIsLoading] = useState(true);
   const Stack = createStackNavigator();
@@ -42,6 +43,11 @@ export default function App() {
           <Stack.Screen
             name="loginScreen"
             component={LoginScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="homePage"
+            component={HomePage}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

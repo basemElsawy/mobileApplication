@@ -12,33 +12,115 @@ import {
 } from "react-native";
 import { useRef, useState } from "react";
 import image from "../../assets/LogoBlue.png";
-
+import arrow from "../../assets/arrow.png";
+import BlueArrow from "../../assets/BlueArrow.png";
+import login from "../../assets/LoginIcon.png";
+import { useNavigation } from "@react-navigation/native";
+import FingerPrint from "../../assets/fingerPrint.png";
+import info from "../../assets/exclamationMark.png";
 export default function LoginScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const modalAnimation = useRef(new Animated.Value(0)).current;
+  const navigator = useNavigation();
   return (
     <>
-      <View style={styles.mainContainer}>
+      <View
+        style={[
+          styles.mainContainer,
+          {
+            opacity: modalVisible ? 0.2 : 1,
+            backgroundColor: modalVisible
+              ? "rgba(0,0,0,0.5)"
+              : "rgba(255,255,255,1)",
+          },
+        ]}
+      >
         <Modal
           transparent={true}
           visible={modalVisible}
-          animationIn="slideInLeft"
-          animationOut="slideOutRight"
+          animationType="fade"
           onRequestClose={() => {
             Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
+            setModalVisible(false);
           }}
         >
-          <Animated.View></Animated.View>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalText}>Hello World!</Text>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={styles.textStyle}>Hide Modal</Text>
-              </Pressable>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalText}>Finger Print</Text>
+                <Pressable
+                  style={[styles.button]}
+                  onPress={() => setModalVisible(!modalVisible)}
+                >
+                  <Text style={styles.textStyle}>X</Text>
+                </Pressable>
+              </View>
+              <View style={styles.modalBody}>
+                <View style={[styles.modalBodyContainer, { gap: 25 }]}>
+                  <Pressable
+                    style={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: 15,
+                    }}
+                  >
+                    <Text>Sign In With Your Finger</Text>
+                    <Image style={styles.fingerPrint} source={FingerPrint} />
+                  </Pressable>
+                  <View
+                    style={[
+                      styles.signInContainer,
+                      {
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: 15,
+                        width: "100%",
+                      },
+                    ]}
+                  >
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigator.navigate("homePage");
+                        setModalVisible(false);
+                      }}
+                      style={[
+                        styles.signInObj,
+                        { paddingVertical: 12, width: "100%", borderRadius: 5 },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.SignInText,
+                          {
+                            textAlign: "center",
+                            color: "white",
+                            fontSize: "21px",
+                          },
+                        ]}
+                      >
+                        Sign In
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigator.navigate("homePage");
+                        setModalVisible(false);
+                      }}
+                    >
+                      <Text style={[styles.noFingerPrint]}>
+                        Proceed Without Finger Print
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+              <View style={styles.modalFooter}>
+                <Image source={info} style={styles.exclamation} />
+                <Text style={{ fontSize: 12 }}>
+                  if your not in the diameter of the company proceed without
+                  fingerprint
+                </Text>
+              </View>
             </View>
           </View>
         </Modal>
@@ -59,11 +141,11 @@ export default function LoginScreen() {
             style={styles.pressableContainer}
             activeOpacity={0.7}
             onPress={() => {
-              setModalVisible((prev) => !prev);
+              setModalVisible(true);
             }}
           >
             <Text style={{ color: "white" }}>Login</Text>
-            <Text style={{ color: "white" }}>{">"}</Text>
+            <Image source={login} />
           </TouchableOpacity>
         </View>
         <View
@@ -78,9 +160,22 @@ export default function LoginScreen() {
               borderColor: "#0083DB",
               borderWidth: "1.5px",
               borderRadius: 5,
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexDirection: "row",
+              paddingHorizontal: 10,
             }}
           >
-            <Button title="Go Back" />
+            <Image
+              style={{ transform: [{ rotate: "180deg" }] }}
+              source={BlueArrow}
+            />
+            <Button
+              onPress={() => {
+                navigator.navigate("onBoarding");
+              }}
+              title="Go Back"
+            />
           </View>
         </View>
       </View>
@@ -93,8 +188,23 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "space-between",
+    position: "relative",
     flexDirection: "column",
-    paddingVertical: 100,
+    paddingTop: 100,
+    paddingBottom: 60,
+  },
+  noFingerPrint: {
+    color: "#0083DB",
+    textDecorationLine: "underline",
+  },
+  signInObj: {
+    backgroundColor: "#0083DB",
+    padding: 20,
+  },
+  fingerPrint: {
+    width: 130,
+    height: 100,
+    resizeMode: "contain",
   },
   formContainer: {
     width: "100%",
@@ -108,6 +218,11 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
   },
+  modalBodyContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
   pressableContainer: {
     marginVertical: 30,
     justifyContent: "space-between",
@@ -124,13 +239,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     marginTop: 22,
-    padding: 40,
+    padding: 20,
   },
   modalView: {
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 15,
     width: "100%",
     height: "50%",
     alignItems: "center",
@@ -142,6 +259,22 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+  },
+  modalFooter: {
+    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  modalHeader: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#0083DB",
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    borderRadius: 15,
   },
   button: {
     borderRadius: 20,
@@ -160,7 +293,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   modalText: {
-    marginBottom: 15,
+    // marginBottom: 15,
+    fontWeight: "bold",
+    color: "white",
     textAlign: "center",
   },
 });
